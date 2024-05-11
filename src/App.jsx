@@ -8,9 +8,7 @@ import CardButton from "./components/CardButton/CardButton";
 import JournalItem from "./components/JournalItem/JournalItem";
 
 import Body from "./layouts/Body/Body";
-
-import Button from "./components/Button/Button";
-import { useState } from "react";
+import JournalForm from "./components/JournalForm/JournalForm";
 
 function App() {
   const data = [
@@ -25,14 +23,6 @@ function App() {
       date: new Date(),
     },
   ];
-  // Состояние, которое следит за нашем имзменение в Input
-  const [inputData, setInputData] = useState("");
-
-  // Функция обработчика события при изменение Input
-  const inputChange = (event) => {
-    console.log(event.target.value);
-    setInputData(event.target.value);
-  };
 
   return (
     <>
@@ -58,9 +48,8 @@ function App() {
           </JournalList>
         </LeftPanel>
         <Body>
-          <input type="text" onChange={inputChange} />
+          <JournalForm />
         </Body>
-        <Button />
       </div>
     </>
   );

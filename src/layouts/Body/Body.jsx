@@ -6,4 +6,4 @@ function Body({ children }) {
 
 export default Body;
 
-// тут children - Это все то, что (лежит в компоненте Body)
+// тут children - Это все то, что (лежит в компоненте Body) В качестве children сюда попадает JournalForm

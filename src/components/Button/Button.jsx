@@ -1,19 +1,14 @@
-import { useState } from "react";
 import "./Button.css";
 
-function Button() {
-  const [textButtonSave, setTextButtonSave] = useState("Сохранить");
-
-  const clicked = () => {
-    setTextButtonSave("Выполнено");
-    console.log("Нажали на кнопку 'Сохранить'");
-  };
-
+function Button({ textButtonSave, onClickk }) {
   return (
-    <button onClick={clicked} className="button accent">
+    <button className="button accent" onClick={onClickk}>
       {textButtonSave}
     </button>
   );
 }
 
 export default Button;
+
+// textButtonSave - этот props приходит с JournalForm и имеет этот атрибут.
+// onClickk - эта функция обработчика события onClick. Она тоже приходит с JournalForm. При это в JournalForm onClickk - объявлена в качестве атрибута и перекинута как props

@@ -1,134 +1,40 @@
-// import styles from "./JournalForm.module.css";
-// import Button from "../Button/Button";
-// import { useContext, useEffect, useReducer, useRef } from "react";
-// import { INITIAL_STATE, formReducer } from "./JournalForm.state";
-// import Input from "../Input/Input";
-// import cn from "classnames";
-// import { UserContext } from "../../context/user.context";
+import styles from "./JournalForm.module.css";
+import { useState } from "react";
+import Button from "../Button/Button";
 
-// function JournalForm({ onSubmit }) {
-//   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
-//   const { isValid, isFormReadyToSubmit, values } = formState;
-//   const titleRef = useRef();
-//   const dateRef = useRef();
-//   const postRef = useRef();
-//   const { userId } = useContext(UserContext);
+function JournalForm() {
+  // Состояние, которое следит за нашем имзменение в Input
+  const [inputData, setInputData] = useState("");
 
-//   const focusError = (isValid) => {
-//     switch (true) {
-//       case !isValid.title:
-//         titleRef.current.focus();
-//         break;
-//       case !isValid.date:
-//         dateRef.current.focus();
-//         break;
-//       case !isValid.post:
-//         postRef.current.focus();
-//         break;
-//     }
-//   };
+  // Функция обработчика события при изменение тега input // Еще не забываем к тегу формы input - Добавить атрибут value чтоб поле было контролируемым.
+  const inputChange = (event) => {
+    setInputData(event.target.value);
+    console.log(inputData);
+  };
 
-//   useEffect(() => {
-//     let timerId;
-//     if (!isValid.date || !isValid.post || !isValid.title) {
-//       focusError(isValid);
-//       timerId = setTimeout(() => {
-//         dispatchForm({ type: "RESET_VALIDITY" });
-//       }, 2000);
-//     }
-//     return () => {
-//       clearTimeout(timerId);
-//     };
-//   }, [isValid]);
+  //Функция, которая сабмитит() нашу форму. У ее target хранятся наши value со всех input. И при чем обработчик висит на теге form, а не на компоненте Button. И при это срабатывает при нажаите на Button
+  const addJournalItem = (event) => {
+    event.preventDefault();
 
-//   useEffect(() => {
-//     if (isFormReadyToSubmit) {
-//       onSubmit(values);
-//       dispatchForm({ type: "CLEAR" });
-//     }
-//   }, [isFormReadyToSubmit, values, onSubmit]);
+    const formData = new FormData(event.target);
+    const formProps = Object.fromEntries(formData);
+    console.log(formProps);
+  };
 
-//   useEffect(() => {
-//     dispatchForm({
-//       type: "SET_VALUE",
-//       payload: { userId },
-//     });
-//   }, [userId]);
+  return (
+    <form className={styles["journal-form"]} onSubmit={addJournalItem}>
+      <input type="title" name="text" />
+      <input type="date" name="date" />
+      <input type="text" name="tag" value={inputData} onChange={inputChange} />
+      <textarea name="post" id="" cols="30" rows="10"></textarea>
+      <Button
+        textButtonSave="Сохранить"
+        onClickk={() => {
+          console.log("Нажали на кнопку Сохранить");
+        }}
+      />
+    </form>
+  );
+}
 
-//   const onChange = (event) => {
-//     dispatchForm({
-//       type: "SET_VALUE",
-//       payload: { [event.target.name]: event.target.value },
-//     });
-//   };
-
-//   const addJournalItem = (event) => {
-//     event.preventDefault();
-//     const formData = new FormData(event.target);
-//     const formProps = Object.fromEntries(formData);
-//     dispatchForm({ type: "SUBMIT", payload: formProps });
-//   };
-
-//   return (
-//     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
-//       {userId}
-//       <div>
-//         <Input
-//           ref={titleRef}
-//           type="text"
-//           name="title"
-//           value={values.title}
-//           onChange={onChange}
-//           appearence="title"
-//           isValid={isValid.title}
-//         />
-//       </div>
-
-//       <div className={styles["form-row"]}>
-//         <label htmlFor="date" className={styles["form-label"]}>
-//           <img src="/calendar.svg" alt="Иконка календаря" />
-//           <span>Дата</span>
-//         </label>
-//         <Input
-//           ref={dateRef}
-//           type="date"
-//           name="date"
-//           value={values.date}
-//           id="date"
-//           onChange={onChange}
-//           isValid={isValid.date}
-//         />
-//       </div>
-
-//       <div className={styles["form-row"]}>
-//         <label htmlFor="tag" className={styles["form-label"]}>
-//           <img src="/folder.svg" alt="Иконка папки" />
-//           <span>Метки</span>
-//         </label>
-//         <Input
-//           type="text"
-//           name="tag"
-//           onChange={onChange}
-//           value={values.tag}
-//           id="tag"
-//         />
-//       </div>
-
-//       <textarea
-//         ref={postRef}
-//         name="post"
-//         id=""
-//         value={values.post}
-//         cols="30"
-//         rows="10"
-//         onChange={onChange}
-//         className={cn(styles["input"], {
-//           [styles["invalid"]]: !isValid.post,
-//         })}
-//       ></textarea>
-//       <Button text="Сохранить" onClick={() => console.log("Нажали")} />
-//     </form>
-//   );
-// }
-
-// export default JournalForm;
+export default JournalForm;
