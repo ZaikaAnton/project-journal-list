@@ -9,7 +9,7 @@
   color: white;
 }
 
-.button.accent:hover {
+.accent:hover {
   background: #0f0281;
   border-color: #0f0281;
 }
