@@ -1,7 +1,6 @@
 .journal-add {
-  color: white;
-  padding: 10px;
-  display: flex;
+  padding: 10px !important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -9,4 +8,5 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  /* text-align: center !important; */
 }

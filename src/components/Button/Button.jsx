@@ -1,7 +1,19 @@
+import { useState } from "react";
 import "./Button.css";
 
 function Button() {
-  return <button className="button accent">Сохранить</button>;
+  const [textButtonSave, setTextButtonSave] = useState("Сохранить");
+
+  const clicked = () => {
+    setTextButtonSave("Выполнено");
+    console.log("Нажали на кнопку 'Сохранить'");
+  };
+
+  return (
+    <button onClick={clicked} className="button accent">
+      {textButtonSave}
+    </button>
+  );
 }
 
 export default Button;

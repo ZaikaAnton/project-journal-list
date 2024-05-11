@@ -5,3 +5,5 @@ function Body({ children }) {
 }
 
 export default Body;
+
+// тут children - Это все то, что (лежит в компоненте Body)
