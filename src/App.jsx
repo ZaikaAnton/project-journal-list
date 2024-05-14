@@ -11,18 +11,18 @@ import JournalForm from "./components/JournalForm/JournalForm";
 import { useState } from "react";
 
 const INITIAL_DATA = [
-  {
-    id: 1,
-    title: "Обучение frontend",
-    text: "Учу, учу, учу",
-    date: new Date(),
-  },
-  {
-    id: 2,
-    title: "React, Redux Toolkit, TypeScript",
-    text: "Учу, учу, учу, учу",
-    date: new Date(),
-  },
+  // {
+  //   id: 1,
+  //   title: "Обучение frontend",
+  //   text: "Учу, учу, учу",
+  //   date: new Date(),
+  // },
+  // {
+  //   id: 2,
+  //   title: "React, Redux Toolkit, TypeScript",
+  //   text: "Учу, учу, учу, учу",
+  //   date: new Date(),
+  // },
 ];
 
 function App() {
@@ -38,7 +38,8 @@ function App() {
         text: item.text,
         title: item.title,
         date: new Date(item.date),
-        id: Math.max(...oldItems.map((i) => i.id)) + 1,
+        id:
+          oldItems.length > 0 ? Math.max(...oldItems.map((i) => i.id)) + 1 : 1,
       },
     ]);
   };
