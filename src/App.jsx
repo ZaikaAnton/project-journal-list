@@ -14,11 +14,13 @@ import { useState } from "react";
 
 const INITIAL_DATA = [
   {
+    id: 1,
     title: "Обучение frontend",
     text: "Учу, учу, учу",
     date: new Date(),
   },
   {
+    id: 2,
     title: "React, Redux Toolkit, TypeScript",
     text: "Учу, учу, учу, учу",
     date: new Date(),
@@ -38,8 +40,18 @@ function App() {
         text: item.text,
         title: item.title,
         date: new Date(item.date),
+        id: Math.max(...oldItems.map((i) => i.id)) + 1,
       },
     ]);
+  };
+
+  // Функция для сортировки отображаемых компонентов.
+  const sortItems = (a, b) => {
+    if (a.date < b.date) {
+      return 1;
+    } else {
+      return -1;
+    }
   };
 
   return (
@@ -49,8 +61,8 @@ function App() {
           <Header />
           <JournalAddButton />
           <JournalList>
-            {items.map((el) => (
-              <CardButton>
+            {items.sort(sortItems).map((el) => (
+              <CardButton key={el.id}>
                 <JournalItem title={el.title} text={el.text} date={el.date} />
               </CardButton>
             ))}
