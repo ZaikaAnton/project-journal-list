@@ -46,6 +46,6 @@
   background-color: rgb(233, 138, 138);
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
+/* input[type="date"]::-webkit-calendar-picker-indicator {
   filter: brightness(0) invert(1);
-}
+} */
