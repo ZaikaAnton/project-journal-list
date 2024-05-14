@@ -10,16 +10,18 @@ import JournalItem from "./components/JournalItem/JournalItem";
 import Body from "./layouts/Body/Body";
 import JournalForm from "./components/JournalForm/JournalForm";
 
+import Button from "./components/Button/Button";
+
 function App() {
   const data = [
     {
       title: "Обучение frontend",
-      text: "Как же меня это все заебало",
+      text: "Учу, учу, учу",
       date: new Date(),
     },
     {
       title: "React, Redux Toolkit, TypeScript",
-      text: "Тоже остопиздел уже",
+      text: "Учу, учу, учу, учу",
       date: new Date(),
     },
   ];
@@ -31,7 +33,13 @@ function App() {
           <Header />
           <JournalAddButton />
           <JournalList>
-            <CardButton>
+            {/* {[<Button>1</Button>, <Button>2</Button>]} */}
+            {data.map((el) => (
+              <CardButton>
+                <JournalItem title={el.title} text={el.text} date={el.date} />
+              </CardButton>
+            ))}
+            {/* <CardButton>
               <JournalItem
                 title={data[0].title}
                 text={data[0].text}
@@ -44,7 +52,7 @@ function App() {
                 text={data[1].text}
                 date={data[1].date}
               />
-            </CardButton>
+            </CardButton> */}
           </JournalList>
         </LeftPanel>
         <Body>
