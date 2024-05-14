@@ -1,32 +1,22 @@
 import styles from "./JournalForm.module.css";
-import { useState } from "react";
 import Button from "../Button/Button";
 
-function JournalForm() {
-  // Состояние, которое следит за нашем имзменение в Input
-  const [inputData, setInputData] = useState("");
-
-  // Функция обработчика события при изменение тега input // Еще не забываем к тегу формы input - Добавить атрибут value чтоб поле было контролируемым.
-  const inputChange = (event) => {
-    setInputData(event.target.value);
-    console.log(inputData);
-  };
-
+function JournalForm({ onSubmit }) {
   //Функция, которая сабмитит() нашу форму. У ее target хранятся наши value со всех input. И при чем обработчик висит на теге form, а не на компоненте Button. И при это срабатывает при нажаите на Button
   const addJournalItem = (event) => {
     event.preventDefault();
-
     const formData = new FormData(event.target);
     const formProps = Object.fromEntries(formData);
-    console.log(formProps);
+    onSubmit(formProps);
+    // console.log(formProps);
   };
 
   return (
     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
-      <input type="title" name="text" />
+      <input type="text" name="title" />
       <input type="date" name="date" />
-      <input type="text" name="tag" value={inputData} onChange={inputChange} />
-      <textarea name="post" id="" cols="30" rows="10"></textarea>
+      <input type="text" name="tag" />
+      <textarea name="text" id="" cols="30" rows="10"></textarea>
       <Button
         textButtonSave="Сохранить"
         onClickk={() => {
@@ -38,3 +28,5 @@ function JournalForm() {
 }
 
 export default JournalForm;
+
+// Props onSubmit - содержит функцию addItem из компонента App.jsx. Закидываем ее в функцию сабмита наших данных.
