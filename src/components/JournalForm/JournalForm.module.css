@@ -36,8 +36,8 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  border-bottom: 2px solid #6e6c6c;
-  color: rgb(248, 240, 224);
+  border-bottom: 2px solid #faf7f7;
+  color: rgb(253, 253, 253);
   width: 100%;
 }
 
@@ -46,6 +46,6 @@
   background-color: rgb(233, 138, 138);
 }
 
-/* input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
   filter: brightness(0) invert(1);
-} */
+}

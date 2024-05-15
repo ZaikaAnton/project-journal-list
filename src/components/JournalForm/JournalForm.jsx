@@ -52,20 +52,26 @@ function JournalForm({ onSubmit }) {
       <input
         type="text"
         name="title"
-        className={`input ${formValidState.title ? "" : styles["invalid"]}`}
+        className={`${styles["input"]} ${
+          formValidState.title ? "" : styles["invalid"]
+        }`}
       />
       <input
         type="date"
         name="date"
-        className={`input ${formValidState.date ? "" : styles["invalid"]}`}
+        className={`${styles["input"]} ${
+          formValidState.date ? "" : styles["invalid"]
+        }`}
       />
-      <input type="text" name="tag" />
+      <input type="text" name="tag" className={styles["input"]} />
       <textarea
         name="text"
         id=""
         cols="30"
         rows="10"
-        className={`input ${formValidState.text ? "" : styles["invalid"]}`}
+        className={`${styles["input"]} ${
+          formValidState.text ? "" : styles["invalid"]
+        }`}
       ></textarea>
       <Button
         textButtonSave="Сохранить"
