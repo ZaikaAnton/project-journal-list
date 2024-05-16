@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import { useEffect, useReducer, useRef } from "react";
 import cn from "classnames";
 import { INITIAL_STATE, formReducer } from "./JournalForm.state";
+import Input from "../Input/Input";
 
 function JournalForm({ onSubmit }) {
   // Состояние, которое отвечает за валидность формы
@@ -73,15 +74,14 @@ function JournalForm({ onSubmit }) {
     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
       {/* Title */}
       <div>
-        <input
+        <Input
           type="text"
           name="title"
           ref={titleRef}
           onChange={onChange}
           value={values.title}
-          className={cn(styles["input-title"], {
-            [styles["invalid"]]: !isValid.title,
-          })}
+          appearence="title"
+          isValid={isValid.title}
         />
       </div>
       {/* Date */}
@@ -92,16 +92,14 @@ function JournalForm({ onSubmit }) {
           <span>Дата</span>
         </label>
 
-        <input
+        <Input
           type="date"
           name="date"
           id="date"
           ref={dateRef}
           onChange={onChange}
           value={values.date}
-          className={cn(styles["input"], {
-            [styles["invalid"]]: !isValid.date,
-          })}
+          isValid={isValid.date}
         />
       </div>
       {/* Tag */}
@@ -112,13 +110,12 @@ function JournalForm({ onSubmit }) {
           <span>Метки</span>
         </label>
 
-        <input
+        <Input
           type="text"
           id="tag"
           name="tag"
           onChange={onChange}
           value={values.tag}
-          className={styles["input"]}
         />
       </div>
       {/* Text */}
