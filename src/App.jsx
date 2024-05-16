@@ -8,26 +8,28 @@ import JournalList from "./components/JournalList/JournalList";
 import Body from "./layouts/Body/Body";
 import JournalForm from "./components/JournalForm/JournalForm";
 
-import { useState } from "react";
-
-const INITIAL_DATA = [
-  // {
-  //   id: 1,
-  //   title: "Обучение frontend",
-  //   text: "Учу, учу, учу",
-  //   date: new Date(),
-  // },
-  // {
-  //   id: 2,
-  //   title: "React, Redux Toolkit, TypeScript",
-  //   text: "Учу, учу, учу, учу",
-  //   date: new Date(),
-  // },
-];
+import { useEffect, useState } from "react";
 
 function App() {
   // Состояние, которое следит за изменением(добавлением к ним) наших исходных данных.
-  const [items, setItems] = useState(INITIAL_DATA);
+  const [items, setItems] = useState([]);
+
+  // Функция, которая берет хранилище из localStorage под меткой "data". И если в data что-то есть, то добавляет это что-то в нашу переменную items
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("data"));
+    if (data) {
+      setItems(data.map((item) => ({ ...item, date: new Date(item.date) })));
+    }
+    // console.log("Это сам localStorage(data)", data);
+  }, []);
+
+  // Функция, которая следит за изменение переменной items и если они изменились и длина items > 0, то добавляет эти данных в localStorage в ячейку data (Поэтому при перезагрузке страницы, записи не пропадают)
+  useEffect(() => {
+    if (items.length) {
+      localStorage.setItem("data", JSON.stringify(items));
+    }
+    // console.log("Это переменная items", items);
+  }, [items]);
 
   // Это функция, которая обновляет наши items. То есть мы добавляем в нащ массив с объектами новые данные, которые ввели через все input. Добавляем при помощи spread.
   // И прокидываем ее в качестве props в JotnalForm. Чтоб засабмитить наши новые данные(сохранить item в items).
@@ -61,3 +63,16 @@ function App() {
 }
 
 export default App;
+
+// {
+// "id": 1,
+// "title": "Обучение frontend",
+// "text": "Учу, учу, учу",
+// "date": "2024/05/16"
+// },
+// {
+// "id": 2,
+// "title": "React, Redux Toolkit, TypeScript",
+// "text": "Учу, учу, учу, учу",
+// "date": "2024/05/16"
+// }
