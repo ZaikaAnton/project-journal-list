@@ -1,66 +1,42 @@
 import styles from "./JournalForm.module.css";
 import Button from "../Button/Button";
-import { useState, useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import cn from "classnames";
-
-const INITIAL_STATE = {
-  title: true,
-  text: true,
-  date: true,
-};
+import { INITIAL_STATE, formReducer } from "./JournalForm.state";
 
 function JournalForm({ onSubmit }) {
   // Состояние, которое отвечает за валидность формы
-  const [formValidState, setFormValidState] = useState(INITIAL_STATE);
+  const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
+  const { isValid, isFormReadyToSubmit, values } = formState;
 
   // Функция, которая при изменение formValidState меняет его обратно в true. (Input при ошибке красятся в красный и через 2сек возвращаются обратно)
   useEffect(() => {
     let timerId;
-    if (!formValidState.date || !formValidState.text || !formValidState.title) {
+    if (!isValid.date || !isValid.text || !isValid.title) {
       timerId = setTimeout(() => {
-        setFormValidState(INITIAL_STATE);
+        dispatchForm({ type: "RESET_VALIDITY" });
       }, 2000);
     }
     // Очищение эффекта после рендера. Это нужно чтоб эффект с покраской input не зависал, не исполнялся по многу раз при большом нажатии на кнопку. То есть мы снова менее чем за 2сек нажимаем на кнопку, тут срабатывает этот return чтоб не завершать функцию сверху и тем самым не задваивает эффект.
     return () => {
       clearTimeout(timerId);
     };
-  }, [formValidState]);
+  }, [isValid]);
+
+  // Если функция готова к Submit, то исполняется эта функция.
+  useEffect(() => {
+    if (isFormReadyToSubmit) {
+      onSubmit(values);
+    }
+  }, [isFormReadyToSubmit]);
 
   //Функция, которая сабмитит() нашу форму. У ее target хранятся наши value со всех input. И при чем обработчик висит на теге form, а не на компоненте Button. И при это срабатывает при нажаите на Button
+  // Функция, которая устанавливает значения наших input
   const addJournalItem = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formProps = Object.fromEntries(formData);
-
-    // Переменная, которая если остается true, то сабмити форму
-    let isFromValid = true;
-
-    // Условие на проверку заполнение формы(input под name title)
-    if (!formProps.title?.trim().length) {
-      setFormValidState((state) => ({ ...state, title: false }));
-      isFromValid = false;
-    } else {
-      setFormValidState((state) => ({ ...state, title: true }));
-    }
-    if (!formProps.text?.trim().length) {
-      setFormValidState((state) => ({ ...state, text: false }));
-      isFromValid = false;
-    } else {
-      setFormValidState((state) => ({ ...state, text: true }));
-    }
-    if (!formProps.date) {
-      setFormValidState((state) => ({ ...state, date: false }));
-      isFromValid = false;
-    } else {
-      setFormValidState((state) => ({ ...state, date: true }));
-    }
-
-    // Проверка результата isFormValid, после проверок на валидность всех input (кроме input с name "tag", он не нужен)
-    if (!isFromValid) {
-      return;
-    }
-    onSubmit(formProps);
+    dispatchForm({ type: "SUBMIT", payload: formProps });
     // console.log(formProps);
   };
 
@@ -72,7 +48,7 @@ function JournalForm({ onSubmit }) {
           type="text"
           name="title"
           className={cn(styles["input-title"], {
-            [styles["invalid"]]: !formValidState.title,
+            [styles["invalid"]]: !isValid.title,
           })}
         />
       </div>
@@ -89,7 +65,7 @@ function JournalForm({ onSubmit }) {
           name="date"
           id="date"
           className={cn(styles["input"], {
-            [styles["invalid"]]: !formValidState.date,
+            [styles["invalid"]]: !isValid.date,
           })}
         />
       </div>
@@ -110,7 +86,7 @@ function JournalForm({ onSubmit }) {
         cols="30"
         rows="10"
         className={cn(styles["input"], {
-          [styles["invalid"]]: !formValidState.text,
+          [styles["invalid"]]: !isValid.text,
         })}
       ></textarea>
       <Button
