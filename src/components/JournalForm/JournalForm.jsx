@@ -1,6 +1,6 @@
 import styles from "./JournalForm.module.css";
 import Button from "../Button/Button";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import cn from "classnames";
 import { INITIAL_STATE, formReducer } from "./JournalForm.state";
 
@@ -8,11 +8,32 @@ function JournalForm({ onSubmit }) {
   // Состояние, которое отвечает за валидность формы
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
   const { isValid, isFormReadyToSubmit, values } = formState;
+  // Хуки для привязки фокуса к input
+  const titleRef = useRef();
+  const dateRef = useRef();
+  const textRef = useRef();
+
+  // Функция, которая навешивает focus на тот input, который не прошел валидацию
+  const focusError = (isValid) => {
+    switch (true) {
+      case !isValid.title:
+        titleRef.current.focus();
+        break;
+      case !isValid.date:
+        dateRef.current.focus();
+        break;
+      case !isValid.text:
+        textRef.current.focus();
+        break;
+    }
+  };
 
   // Функция, которая при изменение formValidState меняет его обратно в true. (Input при ошибке красятся в красный и через 2сек возвращаются обратно)
   useEffect(() => {
     let timerId;
     if (!isValid.date || !isValid.text || !isValid.title) {
+      // Тут применяется фокус, если на како-то input валидация не пройдена
+      focusError(isValid);
       timerId = setTimeout(() => {
         dispatchForm({ type: "RESET_VALIDITY" });
       }, 2000);
@@ -29,7 +50,7 @@ function JournalForm({ onSubmit }) {
       onSubmit(values);
       dispatchForm({ type: "CLEAR" });
     }
-  }, [isFormReadyToSubmit]);
+  }, [isFormReadyToSubmit, values, onSubmit]);
 
   // Функция, которая устанавливает значения в наши Input
   const onChange = (event) => {
@@ -55,6 +76,7 @@ function JournalForm({ onSubmit }) {
         <input
           type="text"
           name="title"
+          ref={titleRef}
           onChange={onChange}
           value={values.title}
           className={cn(styles["input-title"], {
@@ -74,6 +96,7 @@ function JournalForm({ onSubmit }) {
           type="date"
           name="date"
           id="date"
+          ref={dateRef}
           onChange={onChange}
           value={values.date}
           className={cn(styles["input"], {
@@ -104,6 +127,7 @@ function JournalForm({ onSubmit }) {
         id=""
         cols="30"
         rows="10"
+        ref={textRef}
         onChange={onChange}
         value={values.text}
         className={cn(styles["input"], {
