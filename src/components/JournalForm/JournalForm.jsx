@@ -27,16 +27,24 @@ function JournalForm({ onSubmit }) {
   useEffect(() => {
     if (isFormReadyToSubmit) {
       onSubmit(values);
+      dispatchForm({ type: "CLEAR" });
     }
   }, [isFormReadyToSubmit]);
+
+  // Функция, которая устанавливает значения в наши Input
+  const onChange = (event) => {
+    console.log(event.target.name);
+    dispatchForm({
+      type: "SET_VALUE",
+      payload: { [event.target.name]: event.target.value },
+    });
+  };
 
   //Функция, которая сабмитит() нашу форму. У ее target хранятся наши value со всех input. И при чем обработчик висит на теге form, а не на компоненте Button. И при это срабатывает при нажаите на Button
   // Функция, которая устанавливает значения наших input
   const addJournalItem = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const formProps = Object.fromEntries(formData);
-    dispatchForm({ type: "SUBMIT", payload: formProps });
+    dispatchForm({ type: "SUBMIT" });
     // console.log(formProps);
   };
 
@@ -47,6 +55,8 @@ function JournalForm({ onSubmit }) {
         <input
           type="text"
           name="title"
+          onChange={onChange}
+          value={values.title}
           className={cn(styles["input-title"], {
             [styles["invalid"]]: !isValid.title,
           })}
@@ -64,6 +74,8 @@ function JournalForm({ onSubmit }) {
           type="date"
           name="date"
           id="date"
+          onChange={onChange}
+          value={values.date}
           className={cn(styles["input"], {
             [styles["invalid"]]: !isValid.date,
           })}
@@ -77,7 +89,14 @@ function JournalForm({ onSubmit }) {
           <span>Метки</span>
         </label>
 
-        <input type="text" id="tag" name="tag" className={styles["input"]} />
+        <input
+          type="text"
+          id="tag"
+          name="tag"
+          onChange={onChange}
+          value={values.tag}
+          className={styles["input"]}
+        />
       </div>
       {/* Text */}
       <textarea
@@ -85,6 +104,8 @@ function JournalForm({ onSubmit }) {
         id=""
         cols="30"
         rows="10"
+        onChange={onChange}
+        value={values.text}
         className={cn(styles["input"], {
           [styles["invalid"]]: !isValid.text,
         })}
