@@ -1,15 +1,31 @@
 import styles from "./JournalForm.module.css";
 import Button from "../Button/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import cn from "classnames";
+
+const INITIAL_STATE = {
+  title: true,
+  text: true,
+  date: true,
+};
 
 function JournalForm({ onSubmit }) {
   // Состояние, которое отвечает за валидность формы
-  const [formValidState, setFormValidState] = useState({
-    title: true,
-    text: true,
-    date: true,
-  });
+  const [formValidState, setFormValidState] = useState(INITIAL_STATE);
+
+  // Функция, которая при изменение formValidState меняет его обратно в true. (Input при ошибке красятся в красный и через 2сек возвращаются обратно)
+  useEffect(() => {
+    let timerId;
+    if (!formValidState.date || !formValidState.text || !formValidState.title) {
+      timerId = setTimeout(() => {
+        setFormValidState(INITIAL_STATE);
+      }, 2000);
+    }
+    // Очищение эффекта после рендера. Это нужно чтоб эффект с покраской input не зависал, не исполнялся по многу раз при большом нажатии на кнопку. То есть мы снова менее чем за 2сек нажимаем на кнопку, тут срабатывает этот return чтоб не завершать функцию сверху и тем самым не задваивает эффект.
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [formValidState]);
 
   //Функция, которая сабмитит() нашу форму. У ее target хранятся наши value со всех input. И при чем обработчик висит на теге form, а не на компоненте Button. И при это срабатывает при нажаите на Button
   const addJournalItem = (event) => {
