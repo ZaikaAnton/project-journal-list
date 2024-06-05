@@ -1,4 +1,4 @@
-// import styles from "./SelectUser.module.css";
+import styles from "./SelectUser.module.css";
 
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
@@ -9,7 +9,13 @@ function SelectUser() {
     setUserId(event.target.value);
   };
   return (
-    <select name="user" id="user" value={userId} onChange={changeUser}>
+    <select
+      name="user"
+      id="user"
+      value={userId}
+      onChange={changeUser}
+      style={styles}
+    >
       <option value="1">Anton</option>
       <option value="2">Alina</option>
     </select>

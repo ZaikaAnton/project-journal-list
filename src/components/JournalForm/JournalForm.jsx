@@ -79,7 +79,7 @@ function JournalForm({ onSubmit }) {
 
   return (
     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
-      {userId}
+      {/* {userId} */}
       {/* Title */}
       <div>
         <Input
@@ -139,12 +139,19 @@ function JournalForm({ onSubmit }) {
           [styles["invalid"]]: !isValid.text,
         })}
       ></textarea>
-      <Button
+      {/* <Button
         textButtonSave="Сохранить"
         onClickk={() => {
           console.log("Нажали на кнопку Сохранить");
         }}
-      />
+      /> */}
+      <Button
+        onClickk={() => {
+          console.log("Нажали на кнопку Сохранить");
+        }}
+      >
+        Сохранить
+      </Button>
     </form>
   );
 }

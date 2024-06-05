@@ -1,9 +1,9 @@
 import "./Button.css";
 
-function Button({ textButtonSave, onClickk }) {
+function Button({ children, onClickk }) {
   return (
     <button className="button accent" onClick={onClickk}>
-      {textButtonSave}
+      {children}
     </button>
   );
 }
