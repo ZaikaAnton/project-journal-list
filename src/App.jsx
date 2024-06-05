@@ -9,6 +9,10 @@ import Body from "./layouts/Body/Body";
 import JournalForm from "./components/JournalForm/JournalForm";
 import { useLocalStorage } from "./hooks/useLocalStorage.hook";
 
+import { UserContext } from "./context/userContext";
+import { useState } from "react";
+
+// Функция, которая перебирает наши items и приводит их в нужный нам вид
 function mapItems(items) {
   if (!items) {
     return [];
@@ -22,6 +26,8 @@ function mapItems(items) {
 function App() {
   // Кастомный хук, который следит изменением начальных данных, и добавляет новые в items и в localStorage
   const [items, setItems] = useLocalStorage("data");
+  // Стейт, который отвечает за изменение userId
+  const [userId, setUserId] = useState(1);
 
   // // Функция, которая берет хранилище из localStorage под меткой "data". И если в data что-то есть, то добавляет это что-то в нашу переменную items
   // useEffect(() => {
@@ -56,16 +62,18 @@ function App() {
 
   return (
     <>
-      <div className="app">
-        <LeftPanel>
-          <Header />
-          <JournalAddButton />
-          <JournalList items={mapItems(items)} />
-        </LeftPanel>
-        <Body>
-          <JournalForm onSubmit={addItem} />
-        </Body>
-      </div>
+      <UserContext.Provider value={{ userId, setUserId }}>
+        <div className="app">
+          <LeftPanel>
+            <Header />
+            <JournalAddButton />
+            <JournalList items={mapItems(items)} />
+          </LeftPanel>
+          <Body>
+            <JournalForm onSubmit={addItem} />
+          </Body>
+        </div>
+      </UserContext.Provider>
     </>
   );
 }

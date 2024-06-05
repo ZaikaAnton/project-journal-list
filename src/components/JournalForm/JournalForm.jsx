@@ -1,9 +1,10 @@
 import styles from "./JournalForm.module.css";
 import Button from "../Button/Button";
-import { useEffect, useReducer, useRef } from "react";
+import { useContext, useEffect, useReducer, useRef } from "react";
 import cn from "classnames";
 import { INITIAL_STATE, formReducer } from "./JournalForm.state";
 import Input from "../Input/Input";
+import { UserContext } from "../../context/userContext";
 
 function JournalForm({ onSubmit }) {
   // Состояние, которое отвечает за валидность формы
@@ -13,6 +14,7 @@ function JournalForm({ onSubmit }) {
   const titleRef = useRef();
   const dateRef = useRef();
   const textRef = useRef();
+  const { userId } = useContext(UserContext);
 
   // Функция, которая навешивает focus на тот input, который не прошел валидацию
   const focusError = (isValid) => {
@@ -72,6 +74,7 @@ function JournalForm({ onSubmit }) {
 
   return (
     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
+      {userId}
       {/* Title */}
       <div>
         <Input
