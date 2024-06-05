@@ -55,6 +55,11 @@ function JournalForm({ onSubmit }) {
     }
   }, [isFormReadyToSubmit, values, onSubmit]);
 
+  // Эффект, который будет тригириться на изменение userId
+  useEffect(() => {
+    dispatchForm({ type: "SET_VALUE", payload: { userId } });
+  }, [userId]);
+
   // Функция, которая устанавливает значения в наши Input
   const onChange = (event) => {
     console.log(event.target.name);

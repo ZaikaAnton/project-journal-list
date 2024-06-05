@@ -9,8 +9,8 @@ import Body from "./layouts/Body/Body";
 import JournalForm from "./components/JournalForm/JournalForm";
 import { useLocalStorage } from "./hooks/useLocalStorage.hook";
 
-import { UserContext } from "./context/userContext";
-import { useState } from "react";
+// import { UserContext } from "./context/userContext";
+import { UserContextProvider } from "./context/userContext";
 
 // Функция, которая перебирает наши items и приводит их в нужный нам вид
 function mapItems(items) {
@@ -26,8 +26,6 @@ function mapItems(items) {
 function App() {
   // Кастомный хук, который следит изменением начальных данных, и добавляет новые в items и в localStorage
   const [items, setItems] = useLocalStorage("data");
-  // Стейт, который отвечает за изменение userId
-  const [userId, setUserId] = useState(1);
 
   // // Функция, которая берет хранилище из localStorage под меткой "data". И если в data что-то есть, то добавляет это что-то в нашу переменную items
   // useEffect(() => {
@@ -52,8 +50,9 @@ function App() {
     setItems([
       ...mapItems(items),
       {
-        text: item.text,
-        title: item.title,
+        // text: item.text,
+        // title: item.title,
+        ...item,
         date: new Date(item.date),
         id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
       },
@@ -62,7 +61,7 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value={{ userId, setUserId }}>
+      <UserContextProvider>
         <div className="app">
           <LeftPanel>
             <Header />
@@ -73,7 +72,7 @@ function App() {
             <JournalForm onSubmit={addItem} />
           </Body>
         </div>
-      </UserContext.Provider>
+      </UserContextProvider>
     </>
   );
 }
