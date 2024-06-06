@@ -34,6 +34,13 @@ function App() {
   // Это функция, которая обновляет наши items. То есть мы добавляем в нащ массив с объектами новые данные, которые ввели через все input. Добавляем при помощи spread.
   // И прокидываем ее в качестве props в JotnalForm. Чтоб засабмитить наши новые данные(сохранить item в items).
   const addItem = (item) => {
+    const getNextId = (items) => {
+      if (items && Array.isArray(items) && items.length > 0) {
+        return Math.max(...items.map((i) => i.id)) + 1;
+      }
+      return 1;
+    };
+
     if (!item.id) {
       setItems([
         ...mapItems(items),
@@ -42,7 +49,7 @@ function App() {
           // title: item.title,
           ...item,
           date: new Date(item.date),
-          id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
+          id: getNextId(items),
         },
       ]);
     } else {
