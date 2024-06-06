@@ -3,7 +3,7 @@ import SelectUser from "../SelectUser/SelectUser";
 
 import Logo from "../Logo/Logo";
 
-const logos = ["/logo.svg", "/vite.svg"];
+const logos = ["./logo.svg", "/vite.svg"];
 
 function Header() {
   return (

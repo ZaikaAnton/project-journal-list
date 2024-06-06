@@ -4,7 +4,7 @@ import CardButton from "../CardButton/CardButton";
 function JournalAddButton({ clearForm }) {
   return (
     <CardButton className="journal-add" onClick={clearForm}>
-      <img src="/frame.svg" alt="" />
+      <img src="./frame.svg" alt="" />
       Новое воспоминание
     </CardButton>
   );
