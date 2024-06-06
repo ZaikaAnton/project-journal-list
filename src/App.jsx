@@ -87,16 +87,3 @@ function App() {
 }
 
 export default App;
-
-// {
-// "id": 1,
-// "title": "Обучение frontend",
-// "text": "Учу, учу, учу",
-// "date": "2024/05/16"
-// },
-// {
-// "id": 2,
-// "title": "React, Redux Toolkit, TypeScript",
-// "text": "Учу, учу, учу, учу",
-// "date": "2024/05/16"
-// }
