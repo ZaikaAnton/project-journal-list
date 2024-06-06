@@ -10,11 +10,11 @@ function SelectUser() {
   };
   return (
     <select
+      className={styles}
       name="user"
       id="user"
       value={userId}
       onChange={changeUser}
-      style={styles}
     >
       <option value="1">Anton</option>
       <option value="2">Alina</option>

@@ -29,7 +29,7 @@ function App() {
   const [items, setItems] = useLocalStorage("data");
 
   // Это состояние, которое хранит выбранный элемент. Тот элемент по которому мы кликнули из списка записей.
-  const [selectedItem, setSelectedItem] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // Это функция, которая обновляет наши items. То есть мы добавляем в нащ массив с объектами новые данные, которые ввели через все input. Добавляем при помощи spread.
   // И прокидываем ее в качестве props в JotnalForm. Чтоб засабмитить наши новые данные(сохранить item в items).
@@ -70,7 +70,7 @@ function App() {
         <div className="app">
           <LeftPanel>
             <Header />
-            <JournalAddButton />
+            <JournalAddButton clearForm={() => setSelectedItem(null)} />
             <JournalList items={mapItems(items)} setItem={setSelectedItem} />
           </LeftPanel>
           <Body>

@@ -33,6 +33,10 @@ function JournalForm({ onSubmit, data, onDelete }) {
 
   // Этот диспатч прокидывает наши данные в форму. Если наша data появилась или изменилась. Благодаря этому у нас при клике по записи данные высвечиваются на самой форме.
   useEffect(() => {
+    if (!data) {
+      dispatchForm({ type: "CLEAR" });
+      dispatchForm({ type: "SET_VALUE", payload: { userId } });
+    }
     dispatchForm({ type: "SET_VALUE", payload: { ...data } });
   }, [data]);
 
@@ -82,6 +86,7 @@ function JournalForm({ onSubmit, data, onDelete }) {
     // console.log(formProps);
   };
 
+  // Функция, которая очищает форму после удаления записи
   const deleteJournalItem = () => {
     onDelete(data.id);
     dispatchForm({ type: "CLEAR" });
@@ -101,7 +106,7 @@ function JournalForm({ onSubmit, data, onDelete }) {
           appearence="title"
           isValid={isValid.title}
         />
-        {data.id && (
+        {data?.id && (
           <button
             className={styles.delete}
             type="button"

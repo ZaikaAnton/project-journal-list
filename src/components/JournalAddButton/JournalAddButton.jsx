@@ -1,9 +1,9 @@
 import "./JournalAddButton.css";
 import CardButton from "../CardButton/CardButton";
 
-function JournalAddButton() {
+function JournalAddButton({ clearForm }) {
   return (
-    <CardButton className="journal-add">
+    <CardButton className="journal-add" onClick={clearForm}>
       <img src="/frame.svg" alt="" />
       Новое воспоминание
     </CardButton>
@@ -11,3 +11,4 @@ function JournalAddButton() {
 }
 
 export default JournalAddButton;
+// props clearForm приходит с App.jsx
