@@ -6,7 +6,7 @@ import { INITIAL_STATE, formReducer } from "./JournalForm.state";
 import Input from "../Input/Input";
 import { UserContext } from "../../context/userContext";
 
-function JournalForm({ onSubmit }) {
+function JournalForm({ onSubmit, data, onDelete }) {
   // Состояние, которое отвечает за валидность формы
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
   const { isValid, isFormReadyToSubmit, values } = formState;
@@ -31,6 +31,11 @@ function JournalForm({ onSubmit }) {
     }
   };
 
+  // Этот диспатч прокидывает наши данные в форму. Если наша data появилась или изменилась. Благодаря этому у нас при клике по записи данные высвечиваются на самой форме.
+  useEffect(() => {
+    dispatchForm({ type: "SET_VALUE", payload: { ...data } });
+  }, [data]);
+
   // Функция, которая при изменение formValidState меняет его обратно в true. (Input при ошибке красятся в красный и через 2сек возвращаются обратно)
   useEffect(() => {
     let timerId;
@@ -52,8 +57,9 @@ function JournalForm({ onSubmit }) {
     if (isFormReadyToSubmit) {
       onSubmit(values);
       dispatchForm({ type: "CLEAR" });
+      dispatchForm({ type: "SET_VALUE", payload: { userId } });
     }
-  }, [isFormReadyToSubmit, values, onSubmit]);
+  }, [isFormReadyToSubmit, values, onSubmit, userId]);
 
   // Эффект, который будет тригириться на изменение userId
   useEffect(() => {
@@ -62,7 +68,6 @@ function JournalForm({ onSubmit }) {
 
   // Функция, которая устанавливает значения в наши Input
   const onChange = (event) => {
-    console.log(event.target.name);
     dispatchForm({
       type: "SET_VALUE",
       payload: { [event.target.name]: event.target.value },
@@ -77,11 +82,16 @@ function JournalForm({ onSubmit }) {
     // console.log(formProps);
   };
 
+  const deleteJournalItem = () => {
+    onDelete(data.id);
+    dispatchForm({ type: "CLEAR" });
+    dispatchForm({ type: "SET_VALUE", payload: { userId } });
+  };
+
   return (
     <form className={styles["journal-form"]} onSubmit={addJournalItem}>
-      {/* {userId} */}
       {/* Title */}
-      <div>
+      <div className={styles["form-row"]}>
         <Input
           type="text"
           name="title"
@@ -91,6 +101,15 @@ function JournalForm({ onSubmit }) {
           appearence="title"
           isValid={isValid.title}
         />
+        {data.id && (
+          <button
+            className={styles.delete}
+            type="button"
+            onClick={deleteJournalItem}
+          >
+            Delete
+          </button>
+        )}
       </div>
       {/* Date */}
       <div className={styles["form-row"]}>
@@ -106,7 +125,9 @@ function JournalForm({ onSubmit }) {
           id="date"
           ref={dateRef}
           onChange={onChange}
-          value={values.date}
+          value={
+            values.date ? new Date(values.date).toISOString().slice(0, 10) : ""
+          }
           isValid={isValid.date}
         />
       </div>
@@ -159,3 +180,4 @@ function JournalForm({ onSubmit }) {
 export default JournalForm;
 
 // Props onSubmit - содержит функцию addItem из компонента App.jsx. Закидываем ее в функцию сабмита наших данных.
+// data - это props, который приходят из App.js. Оно содержит в себе selectedItem - а он ссылается на те данные, по которым мы кликнули из списка записей

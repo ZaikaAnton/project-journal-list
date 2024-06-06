@@ -11,6 +11,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage.hook";
 
 // import { UserContext } from "./context/userContext";
 import { UserContextProvider } from "./context/userContext";
+import { useState } from "react";
 
 // Функция, которая перебирает наши items и приводит их в нужный нам вид
 function mapItems(items) {
@@ -27,36 +28,40 @@ function App() {
   // Кастомный хук, который следит изменением начальных данных, и добавляет новые в items и в localStorage
   const [items, setItems] = useLocalStorage("data");
 
-  // // Функция, которая берет хранилище из localStorage под меткой "data". И если в data что-то есть, то добавляет это что-то в нашу переменную items
-  // useEffect(() => {
-  //   const data = JSON.parse(localStorage.getItem("data"));
-  //   if (data) {
-  //     setItems(data.map((item) => ({ ...item, date: new Date(item.date) })));
-  //   }
-  //   // console.log("Это сам localStorage(data)", data);
-  // }, []);
-
-  // // Функция, которая следит за изменение переменной items и если они изменились и длина items > 0, то добавляет эти данных в localStorage в ячейку data (Поэтому при перезагрузке страницы, записи не пропадают)
-  // useEffect(() => {
-  //   if (items.length) {
-  //     localStorage.setItem("data", JSON.stringify(items));
-  //   }
-  //   // console.log("Это переменная items", items);
-  // }, [items]);
+  // Это состояние, которое хранит выбранный элемент. Тот элемент по которому мы кликнули из списка записей.
+  const [selectedItem, setSelectedItem] = useState({});
 
   // Это функция, которая обновляет наши items. То есть мы добавляем в нащ массив с объектами новые данные, которые ввели через все input. Добавляем при помощи spread.
   // И прокидываем ее в качестве props в JotnalForm. Чтоб засабмитить наши новые данные(сохранить item в items).
   const addItem = (item) => {
-    setItems([
-      ...mapItems(items),
-      {
-        // text: item.text,
-        // title: item.title,
-        ...item,
-        date: new Date(item.date),
-        id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
-      },
-    ]);
+    if (!item.id) {
+      setItems([
+        ...mapItems(items),
+        {
+          // text: item.text,
+          // title: item.title,
+          ...item,
+          date: new Date(item.date),
+          id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
+        },
+      ]);
+    } else {
+      setItems([
+        ...mapItems(items).map((i) => {
+          if (i.id === item.id) {
+            return {
+              ...item,
+            };
+          }
+          return i;
+        }),
+      ]);
+    }
+  };
+
+  // Функция, которая удаляет запись
+  const deleteItem = (id) => {
+    setItems([...items.filter((i) => i.id !== id)]);
   };
 
   return (
@@ -66,10 +71,14 @@ function App() {
           <LeftPanel>
             <Header />
             <JournalAddButton />
-            <JournalList items={mapItems(items)} />
+            <JournalList items={mapItems(items)} setItem={setSelectedItem} />
           </LeftPanel>
           <Body>
-            <JournalForm onSubmit={addItem} />
+            <JournalForm
+              onSubmit={addItem}
+              onDelete={deleteItem}
+              data={selectedItem}
+            />
           </Body>
         </div>
       </UserContextProvider>

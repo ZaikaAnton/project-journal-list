@@ -50,3 +50,14 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: brightness(0) invert(1);
 }
+
+.delete {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: aliceblue;
+}
+.delete:hover {
+  background: gray;
+  border-radius: 10%;
+}
